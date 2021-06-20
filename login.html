@@ -5,7 +5,7 @@
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Super Bank</title>
+        <title>Super Bank - member registeration</title>
         <!-- Favicon-->
         <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
         <!-- Bootstrap icons-->
@@ -47,29 +47,28 @@
         <header class="bg-dark py-5">
             <div class="container px-4 px-lg-5">
                 <div class="text-center text-white">
-                    <h1 class="display-4 fw-bolder">Ready to Checkout </h1>
-                    <p class="lead fw-normal text-white-50 mb-0">Register today to get discount on your purchase.</p>
+                    <h1 class="display-4 fw-bolder">Welcome to Our Bank </h1>
+                    <p class="lead fw-normal text-white-50 mb-0">Save More. Get More.</p>
                 </div>
             </div>
         </header>
         <!-- Section-->
         <section class="py-5">
             <div class="container px-4 px-lg-5 mt-5">
-                <div id="content_holder" class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
-                    <table class="table table-striped">
-                        <thead>
-                          <tr>
-                            <th scope="col">Product</th>
-                            <th scope="col">Quantity</th>
-                            <th scope="col">Delete</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                        </tbody>
-                      </table>
-                </div>
-                <div class="text-center">
-                    <button class="btn btn-success">Checkout</button>
+                <div id="message"></div>
+                <div class="text-center"><a href="/customer.html">I am new customer</a></div>
+                <div id="member_holder" class="row gx-4 gx-lg-5 ">
+                    <div class="mb-3">
+                        <label for="email" class="form-label">email</label>
+                        <input type="text" class="form-control" id="email" placeholder="name@example.com">
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password"/>
+                    </div>
+                    <div class="mb-3 text-center">
+                        <button type="button" class="btn btn-primary" id="login">Login</button>
+                    </div>                    
                 </div>
             </div>
         </section>
@@ -80,29 +79,26 @@
         <!-- Bootstrap core JS-->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"></script>
         <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
         <script>
-            //proceed to checkout only if the member is logged in
-            let logged_member = JSON.parse(localStorage.getItem('logged_member'));
-            if (logged_member) {
-            let cart = JSON.parse(localStorage.getItem('cart'));
-            console.log(cart);
-            let cart_content = "";
-            cart.forEach(item => {
-                //more icons at https://icons.getbootstrap.com/
-                cart_content += `<tr>
-                            <td>${item.product.productTitle}</td>
-                            <td><input type="text" value='${item.quantity}' /></td>
-                            <td><a href='#'><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
-  <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6z"/>
-  <path fill-rule="evenodd" d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1zM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118zM2.5 3V2h11v1h-11z"/>
-</svg></a></td>
-                            </tr>`;
-            });
-            document.querySelector('tbody').innerHTML = cart_content;
-        } else {
-            //the member is not logged in redirect to registration
-            window.location.replace('/customer.html');
-        }
+            //verify if the all values are provided and not empty.
+            let login_handler = () => {
+                let member = {
+                    email: document.getElementById('email').value,
+                    password: document.getElementById('password').value
+                }
+                let logged = authenticateMember(member); //check if the member is found in storage
+                console.log('logged', logged);
+                if (logged) { //member found
+                    localStorage.setItem('logged_member', JSON.stringify(logged));
+                    window.location.replace('/index.html');//redirect
+                } else {
+                    setMessage("Email/password incorrect", false);
+                }
+            }
+            let login = document.getElementById("login").addEventListener(
+                'click', login_handler
+            );
         </script>
     </body>
 </html>

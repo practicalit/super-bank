@@ -109,6 +109,15 @@ const loadProducts = () => {
                     ${product.prevPrice ? product.prevPrice : ""}
                 </span>
                 ${product.price}
+                <div>
+                    Quantity: <select>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                    </select>
+                </div>
             </div>
         </div>
         <!-- Product actions-->
@@ -145,4 +154,56 @@ function containsClass(element, className) {
 function getProductById(id) {
     let products = JSON.parse(localStorage.getItem('products'));
     return products.find( product => product.id == id);
+}
+
+/**
+ * Function to register member to the storage.
+ * 
+ * @param member 
+ */
+function registerMember(member) {
+    //validate for values
+    //get members first
+    let members = JSON.parse(localStorage.getItem('members'));
+    if (members) {
+        //we got members then add it to the existing ones
+        //validate for array here
+    } else {
+        members = [];
+    }
+    //check if member already exists by email (use other function for that.)
+    members.push(member);
+    //put back to the database
+    localStorage.setItem('members', JSON.stringify(members));
+    return true;
+}
+
+function setMessage(content, success=true) {
+    let message = document.getElementById('message');
+    message.innerHTML = content;
+    message.classList.remove('alert-danger');
+    message.classList.add('alert-success');
+    if (!success) {
+        message.classList.remove('alert-success');
+        message.classList.add('alert-danger');
+    }
+}
+
+function authenticateMember(member) {
+    //get all the members first
+    let members = JSON.parse(localStorage.getItem('members'));
+    if (members) {
+        let logged_member = members.find( m => m.email == member.email && m.password == member.password );
+        if (logged_member) {
+            return logged_member
+        }
+    }
+    return false;
+}
+welcomeLoggedUser();
+function welcomeLoggedUser() {
+    let logged_member = JSON.parse(localStorage.getItem('logged_member'));
+    if (logged_member) {
+        document.getElementById('logged_member').innerHTML = `Welcome ${logged_member.name} `;
+    }
 }
